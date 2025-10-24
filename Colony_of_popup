@@ -1,0 +1,62 @@
+# Colorful popups demo (finite, safe)
+Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+
+# --- Configuration (safe, finite) ---
+[int]$Count     = 6666666666        # number of popups to create
+[int]$DelayMs   = .000001      # delay between spawning popups (milliseconds)
+[int]$LifeMs    = 50000000000000000     # how long each popup stays open (milliseconds)
+[string[]]$Palette = @('LightSteelBlue','LightCoral','PaleGreen','Khaki','Plum','LightSalmon') 
+
+# Optional: customize title/text
+[string]$Title = 'Official Notice'
+[string]$Message = "This is a harmless demo popup.`n(For testing/presentation only.)"
+
+# --- Implementation ---
+for ($i = 0; $i -lt $Count; $i++) {
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = $Title
+    $form.Size = New-Object System.Drawing.Size(360,140)
+    $form.StartPosition = 'Manual'
+    # position popups staggered so they don't completely overlap
+    $offsetX = 100 + ( ($i % 5) * 30 )
+    $offsetY = 100 + ( [math]::Floor($i / 5) * 30 )
+    $form.Location = New-Object System.Drawing.Point($offsetX, $offsetY)
+    $form.TopMost = $true
+    # cycle through palette
+    $colorName = $Palette[$i % $Palette.Count]
+    try {
+        $form.BackColor = [System.Drawing.Color]::FromName($colorName)
+    } catch {
+        $form.BackColor = [System.Drawing.Color]::LightGray
+    }
+
+    $label = New-Object System.Windows.Forms.Label
+    $label.Text = $Message
+    $label.Dock = 'Fill'
+    $label.TextAlign = 'MiddleCenter'
+    $label.Font = New-Object System.Drawing.Font('Segoe UI',10,[System.Drawing.FontStyle]::Bold)
+    $label.AutoSize = $false
+    $form.Controls.Add($label)
+
+    # Create a timer that will close this form after $LifeMs
+    $timer = New-Object System.Windows.Forms.Timer
+    $timer.Interval = $LifeMs
+    $timer.Add_Tick({
+        $timer.Stop()
+        try { $form.Close() } catch {}
+        try { $timer.Dispose() } catch {}
+    })
+
+    # show form (non-modal) and start its timer
+    $form.Show()
+    $timer.Start()
+
+    # wait before spawning next popup
+    Start-Sleep -Milliseconds $DelayMs
+}
+
+# Keep powershell session alive until all forms close (optional)
+# Wait until there are no open top-level forms created by this script
+while ([System.Windows.Forms.Application]::OpenForms.Count -gt 0) {
+    Start-Sleep -Milliseconds 200
+}
